@@ -1,7 +1,7 @@
 """
 Upload to PyPI
 
-python3 setup.py sdist
+python setup.py sdist
 twine upload --repository pypitest dist/py-timod-X.X.X.tar.gz
 twine upload --repository pypi dist/py-timod-X.X.X.tar.gz
 """
