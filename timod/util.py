@@ -18,7 +18,6 @@ from .proto import (
 )
 
 
-
 class _Stop(Exception):
     pass
 
@@ -34,8 +33,10 @@ async def _connect_stdin_stdout(loop):
     writer = asyncio.StreamWriter(w_transport, w_protocol, reader, loop)
     return reader, writer
 
+
 def _stop(reader):
     reader.set_exception(_Stop())
+
 
 def _write_data(writer, pid, tp, data):
     data = msgpack.packb(data, use_bin_type=True)
@@ -46,17 +47,22 @@ def _write_data(writer, pid, tp, data):
             tp ^ 0xff)
     writer.write(header + data)
 
+
 def _write_conf_err(writer, pid, err_code, err_msg):
     _write_data(writer, pid, PROTO_MODULE_CONF_ERR, (err_code, err_msg))
+
 
 def _write_conf_ok(writer, pid):
     _write_data(writer, pid, PROTO_MODULE_CONF_OK, None)
 
+
 def _write_err(writer, pid, err_code, err_msg):
     _write_data(writer, pid, PROTO_MODULE_ERR, (err_code, err_msg))
 
+
 def _write_resp(writer, pid, resp):
     _write_data(writer, pid, PROTO_MODULE_RES, resp)
+
 
 async def _on_request(pkg, handler, writer):
     try:
@@ -74,6 +80,7 @@ async def _on_request(pkg, handler, writer):
             _write_resp(writer, pkg.pid, resp)
     except Exception as e:
         handler.on_error(e)
+
 
 async def _on_config(pkg, handler, writer):
     try:
@@ -96,6 +103,7 @@ _PROTO_MAP = {
     PROTO_MODULE_CONF: _on_config,
     PROTO_MODULE_REQ: _on_request,
 }
+
 
 async def _module_loop(loop, handler):
     reader, writer = await _connect_stdin_stdout(loop)
@@ -151,4 +159,3 @@ async def _module_loop(loop, handler):
 def start_module(name, handler):
     loop = asyncio.get_event_loop()
     loop.run_until_complete(_module_loop(loop, handler))
-

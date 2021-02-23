@@ -79,4 +79,3 @@ class NodeError(TiException):
 
 class AssertionError(TiException, _AssertionError):
     err_code = -50
-

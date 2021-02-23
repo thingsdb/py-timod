@@ -10,7 +10,7 @@ PROTO_MODULE_CONF_ERR = 66
 # PROTO_MODULE_REQ - when a request is received
 PROTO_MODULE_REQ = 80
 
-#PROTO_MODULE_RES - is used to respond to a PROTO_MODULE_REQ package
+# PROTO_MODULE_RES - is used to respond to a PROTO_MODULE_REQ package
 PROTO_MODULE_RES = 81
 
 # PROTO_MODULE_ERR - is used to respond to a PROTO_MODULE_REQ with an error

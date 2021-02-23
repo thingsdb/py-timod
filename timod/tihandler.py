@@ -1,5 +1,5 @@
 import logging
-from abc import ABC,abstractmethod
+from abc import ABC, abstractmethod
 from typing import Any
 
 
@@ -16,5 +16,3 @@ class TiHandler(ABC):
     @abstractmethod
     async def on_request(self, data: dict):
         pass
-
-
