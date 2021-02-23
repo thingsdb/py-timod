@@ -116,44 +116,41 @@ async def _module_loop(loop, handler):
 
     while True:
         try:
-            data = await reader.read(1)
+            data = await reader.read(8)
         except _Stop:
             break
-
         buf.extend(data)
-        size = len(buf)
-        while size >= Pkg.st_package.size:
-            if pkg is None:
-                try:
-                    pkg = Pkg(buf)
-                except Exception as e:
-                    await handler.on_error(e)
-                    return
 
-            if size < pkg.total:
+        try:
+            pkg = Pkg(buf)
+        except Exception as e:
+            await handler.on_error(e)
+            return
+
+        if pkg.length:
+            try:
+                data = await reader.read(pkg.length)
+            except _Stop:
                 break
+            buf.extend(data)
 
-            try:
-                pkg.extract_data_from(buf)
-            except KeyError as e:
-                await handler.on_error(
-                    KeyError(f'unsupported package received: {e}'))
-                return
-            except Exception as e:
-                await handler.on_error(e)
-                return
+        try:
+            pkg.extract_data_from(buf)
+        except KeyError as e:
+            await handler.on_error(
+                KeyError(f'unsupported package received: {e}'))
+            return
+        except Exception as e:
+            await handler.on_error(e)
+            return
 
-            try:
-                callback = _PROTO_MAP[pkg.tp]
-            except Exception as e:
-                await handler.on_error(f'unexpected package type: {pkg.tp}')
-                return
+        try:
+            callback = _PROTO_MAP[pkg.tp]
+        except Exception as e:
+            await handler.on_error(f'unexpected package type: {pkg.tp}')
+            return
 
-            asyncio.ensure_future(callback(pkg, handler, writer))
-
-            pkg = None
-            buf.clear()
-            size = 0
+        asyncio.ensure_future(callback(pkg, handler, writer))
 
 
 def start_module(name, handler):
