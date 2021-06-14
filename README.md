@@ -16,7 +16,7 @@ If the module requires configuration data, for example a connection string, then
 
 Do not use functions like `print` since these function will write to `stdout` and this is reserved for ThingsDB. Instead, use `logging...` to write to `stderr` instead.
 
-The following code may be used as a template: (see: https://github.com/thingsdb/ThingsDB/tree/master/modules/python/demo)
+The following code may be used as a template: (see: https://github.com/thingsdb/ThingsDB/tree/master/modules/python/demo.py)
 
 ```python
 import logging
