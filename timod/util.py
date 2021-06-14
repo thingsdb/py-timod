@@ -7,7 +7,7 @@ import asyncio
 import logging
 import msgpack
 from .pkg import Pkg
-from .ex import TiException
+from .ex import TiException, OperationError
 from .proto import (
     PROTO_MODULE_CONF,
     PROTO_MODULE_CONF_OK,
@@ -74,12 +74,12 @@ async def _on_request(pkg, handler, writer):
             _write_err(
                 writer,
                 pkg.pid,
-                Ex.Operation,
+                OperationError.err_code,
                 f'unexpected module failure: {e}')
         else:
             _write_resp(writer, pkg.pid, resp)
     except Exception as e:
-        handler.on_error(e)
+        await handler.on_error(e)
 
 
 async def _on_config(pkg, handler, writer):
@@ -97,7 +97,7 @@ async def _on_config(pkg, handler, writer):
         else:
             _write_conf_ok(writer, pkg.pid)
     except Exception as e:
-        handler.on_error(e)
+        await handler.on_error(e)
 
 _PROTO_MAP = {
     PROTO_MODULE_CONF: _on_config,

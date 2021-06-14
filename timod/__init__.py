@@ -16,8 +16,10 @@ from .ex import (
     NodeError,
     AssertionError,
 )
-from .util import start_module
 from .tihandler import TiHandler
+try:
+    from .util import start_module
+except ImportError:
+    pass  # importing msgpack might fail when importing from setup.py
 
-
-__version__ = "0.0.2"
+__version__ = "0.0.4"
