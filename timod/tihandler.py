@@ -5,7 +5,6 @@ from typing import Any
 
 class TiHandler(ABC):
 
-    @abstractmethod
     async def on_error(self, e: Exception):
         logging.error(e)
 

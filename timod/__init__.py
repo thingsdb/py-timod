@@ -22,4 +22,4 @@ try:
 except ImportError:
     pass  # importing msgpack might fail when importing from setup.py
 
-__version__ = "0.0.4"
+__version__ = "0.0.5"

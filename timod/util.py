@@ -154,5 +154,6 @@ async def _module_loop(loop, handler):
 
 
 def start_module(name, handler):
+    logging.info(f'Starting module `{name}`')
     loop = asyncio.get_event_loop()
     loop.run_until_complete(_module_loop(loop, handler))
