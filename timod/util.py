@@ -75,7 +75,7 @@ async def _on_request(pkg, handler, writer):
                 writer,
                 pkg.pid,
                 OperationError.err_code,
-                f'unexpected module failure: {e}')
+                repr(e))
         else:
             _write_resp(writer, pkg.pid, resp)
     except Exception as e:
@@ -92,8 +92,8 @@ async def _on_config(pkg, handler, writer):
             _write_conf_err(
                 writer,
                 pkg.pid,
-                Ex.Operation,
-                f'unexpected module failure: {e}')
+                OperationError.err_code,
+                repr(e))
         else:
             _write_conf_ok(writer, pkg.pid)
     except Exception as e:
